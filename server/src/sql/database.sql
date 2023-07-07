@@ -1,4 +1,5 @@
 DROP TABLE IF EXISTS seats, halls, cinemas;
+DROP EVENT IF EXISTS delete_seats_event;
 
 CREATE TABLE IF NOT EXISTS cinemas (
     id INT NOT NULL PRIMARY KEY AUTO_INCREMENT,
@@ -17,7 +18,17 @@ CREATE TABLE IF NOT EXISTS halls (
 CREATE TABLE IF NOT EXISTS seats (
     id INT NOT NULL PRIMARY KEY AUTO_INCREMENT,
     position INT,
-    status ENUM('free', 'reserved', 'sold') DEFAULT 'free',
+    status ENUM('reserved', 'sold') DEFAULT 'reserved',
+    created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
     hall_id INT,
     FOREIGN KEY (hall_id) REFERENCES halls(id)
 );
+
+SET GLOBAL event_scheduler = ON;
+
+CREATE EVENT IF NOT EXISTS delete_seats_event
+    ON SCHEDULE EVERY 1 MINUTE
+    ON COMPLETION PRESERVE
+    DO
+        DELETE FROM seats 
+        WHERE TIMESTAMPDIFF(MINUTE, created_at, NOW()) >= 2 AND seats.status = "reserved";

@@ -11,5 +11,7 @@ INSERT INTO halls (name, row_amount, column_amount, cinema_id)
 INSERT INTO seats (position, status, hall_id) 
     VALUES 
         (3, "sold", 1),
+        (4, "reserved", 1),
+        (6, "reserved", 2),
         (8, "sold", 2),
         (9, "sold", 2);
