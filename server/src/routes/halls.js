@@ -25,8 +25,12 @@ router.get("/:id", (req, res) => {
         if (err) {
             console.info("Error: ", err);
             return res.json(err.message);
-        } else {
+        }
+
+        if (data.length) {
             return res.json(data);
+        } else {
+            return res.json({ message: "Could not find Hall with this ID..." });
         }
     });
 });
