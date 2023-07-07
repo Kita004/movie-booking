@@ -1,25 +1,13 @@
 import express from "express";
 import dotenv from "dotenv";
-import mysql from "mysql";
+
+import { hallRouter } from "./routes/halls.js";
 
 dotenv.config();
 
 const app = express();
-// const db = mysql.createConnection({
-//     host: "localhost",
-//     user: process.env.DB_USER || "your_username",
-//     password: process.env.DB_PASSWORD || "your_password",
-// });
-
-// db.connect((err) => {
-//     if (err) {
-//         console.info("Error when connecting to mysql DB: ", err);
-//     } else {
-//         console.info("Connected to mysql DB!");
-//     }
-// });
-
 app.use(express.json());
+app.use("/api/halls", hallRouter);
 
 app.get("/", (req, res) => {
     res.json("Hello this is the Backend!");
