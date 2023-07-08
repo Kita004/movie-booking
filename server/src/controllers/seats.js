@@ -7,10 +7,10 @@ export const reserveSeat = (req, res) => {
         });
     }
 
-    const seatToReserve = new Seat({
+    const seatToReserve = {
         position: req.body.position,
         hall_id: req.body.hall_id,
-    });
+    };
 
     // check if Seat is already Reserved
     Seat.checkIfReserved(seatToReserve, (err, data) => {

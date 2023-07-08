@@ -3,6 +3,7 @@ import dotenv from "dotenv";
 
 import { hallRouter } from "./routes/halls.js";
 import { cinemaRouter } from "./routes/cinemas.js";
+import { seatRouter } from "./routes/seats.js";
 
 dotenv.config();
 
@@ -10,6 +11,7 @@ const app = express();
 app.use(express.json());
 app.use("/api/halls", hallRouter);
 app.use("/api/cinemas", cinemaRouter);
+app.use("/api/seats", seatRouter);
 
 app.get("/", (req, res) => {
     res.json("Hello this is the Backend!");
