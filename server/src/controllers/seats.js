@@ -38,7 +38,9 @@ export const reserveSeat = (req, res) => {
 };
 
 export const findAll = (req, res) => {
-    Seat.getAll((err, data) => {
+    const hall_id = req.query.hall_id;
+
+    Seat.getAll(hall_id, (err, data) => {
         if (err) {
             res.status(500).send({
                 message: err.message || "Error when retrieving All Seats...",

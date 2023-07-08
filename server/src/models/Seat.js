@@ -18,8 +18,13 @@ Seat.create = (newSeat, result) => {
     });
 };
 
-Seat.getAll = (result) => {
-    db.query("SELECT * FROM seats", (err, data) => {
+Seat.getAll = (hall_id, result) => {
+    let query = "SELECT * FROM seats";
+
+    if (hall_id) {
+        query += ` WHERE hall_id = ${hall_id}`;
+    }
+    db.query(query, (err, data) => {
         if (err) {
             console.info("Error when querying all Seats...");
             result(err, null);
