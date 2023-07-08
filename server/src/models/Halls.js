@@ -8,8 +8,14 @@ export const Hall = (hall) => {
     this.cinema_id = hall.cinema_id;
 };
 
-Hall.getAll = (result) => {
-    db.query("SELECT * FROM halls", (err, data) => {
+Hall.getAll = (cinema_id, result) => {
+    let query = "SELECT * FROM halls";
+
+    if (cinema_id) {
+        query += ` WHERE cinema_id = ${cinema_id}`;
+    }
+
+    db.query(query, (err, data) => {
         if (err) {
             console.info("Error when querying all Halls...");
             result(err, null);
@@ -26,6 +32,23 @@ Hall.getById = (id, result) => {
     db.query(query, (err, data) => {
         if (err) {
             console.info("Error when finding Hall by ID: ", err);
+            result(err, null);
+            return;
+        }
+
+        if (data.length) {
+            result(null, data);
+        } else {
+            result({ message: "Not Found..." }, null);
+        }
+    });
+};
+
+Hall.getByCinemaId = (cinema_id, result) => {
+    let query = `SELECT * FROM halls WHERE cinema_id = ${cinema_id}`;
+    db.query(query, (err, data) => {
+        if (err) {
+            console.info("Error when finding Hall by cinemaID: ", err);
             result(err, null);
             return;
         }
