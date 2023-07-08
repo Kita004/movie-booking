@@ -29,3 +29,19 @@ Cinema.getAll = (result) => {
         result(null, data);
     });
 };
+
+Cinema.deleteById = (id) => {
+    db.query(`DELETE FROM cinemas WHERE id =${id}`, (err, data) => {
+        if (err) {
+            console.info("Error when deleting Cinema by ID: ", err);
+            result(err, null);
+            return;
+        }
+
+        if (data.affectedRows == 0) {
+            result({ message: "Not Found..." }, null);
+        } else {
+            result(null, data);
+        }
+    });
+};
