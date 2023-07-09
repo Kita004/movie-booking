@@ -11,7 +11,7 @@ import { HallCard } from "./components/HallCard";
 import { socket, SocketContext } from "./context/socket";
 
 import {
-    fetchCinemas,
+    // fetchCinemas,
     fetchHallsByCinemaId,
     fetchSeatsByHallId,
 } from "./utils/api";
@@ -23,16 +23,23 @@ function App() {
     const [seats, setSeats] = useState();
 
     useEffect(() => {
+        socket.on("createCinema", (data) => {
+            console.log("Data: ", data);
+            setCinemas((prev) => [...prev, data]);
+        });
+    }, [socket]);
+
+    useEffect(() => {
         getCinemas();
     }, []);
 
     const getCinemas = async () => {
-        const data = await fetchCinemas();
-        setCinemas(data);
-        // socket.emit("fetchCinemas");
-        // socket.on("fetchCinemas", (data) => {
-        //     setCinemas(data);
-        // });
+        // const data = await fetchCinemas();
+        // setCinemas(data);
+        socket.emit("fetchCinemas");
+        socket.on("fetchCinemas", (data) => {
+            setCinemas(data);
+        });
     };
 
     const getHallsByCinemaId = async (cinema_id) => {

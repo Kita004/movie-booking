@@ -9,7 +9,7 @@ import { cinemaRouter } from "./routes/cinemas.js";
 import { seatRouter } from "./routes/seats.js";
 
 import { initDB } from "./models/sql/initDB.js";
-import { create, findAllWithSocket } from "./controllers/cinemas.js";
+import { createWithSocket, findAllWithSocket } from "./controllers/cinemas.js";
 
 dotenv.config();
 
@@ -26,9 +26,8 @@ export const io = new Server(server, {
 
 io.on("connection", (socket) => {
     console.log(`New User: ${socket.id}`);
-    socket.on("createCinema", (data) =>
-        console.log("Creating Cinema...", data.cinema_name)
-    );
+
+    socket.on("createCinema", (data) => createWithSocket(socket, data, io));
     socket.on("fetchCinemas", () => findAllWithSocket(socket));
 });
 

@@ -44,25 +44,25 @@ export const create = (req, res) => {
     });
 };
 
-// const createWithSocket = (socket, data) => {
-//     if (!data) {
-//         socket.emit("sendError", { message: "Need a name!!" });
-//     }
+export const createWithSocket = (socket, data, io = null) => {
+    if (!data) {
+        socket.emit("sendError", { message: "Need a name!!" });
+    }
 
-//     const newCinema = {
-//         name: data.cinema_name,
-//     };
+    const newCinema = {
+        name: data.cinema_name,
+    };
 
-//     Cinema.create(newCinema, (err, data) => {
-//         if (err) {
-//             socket.emit("sendError", {
-//                 message: err.message || "Error when Creating New Cinema...",
-//             });
-//         } else {
-//             socket.broadcast.emit("createCinema");
-//         }
-//     });
-// };
+    Cinema.create(newCinema, (err, data) => {
+        if (err) {
+            socket.emit("sendError", {
+                message: err.message || "Error when Creating New Cinema...",
+            });
+        } else {
+            io.emit("createCinema", data);
+        }
+    });
+};
 
 export const deleteOne = (req, res) => {
     Cinema.deleteById(req.params.id, (err, data) => {
