@@ -29,6 +29,10 @@ function App() {
     const getCinemas = async () => {
         const data = await fetchCinemas();
         setCinemas(data);
+        // socket.emit("fetchCinemas");
+        // socket.on("fetchCinemas", (data) => {
+        //     setCinemas(data);
+        // });
     };
 
     const getHallsByCinemaId = async (cinema_id) => {

@@ -12,6 +12,16 @@ export const findAll = (req, res) => {
     });
 };
 
+export const findAllWithSocket = (socket) => {
+    Cinema.getAll((err, data) => {
+        if (err) {
+            socket.emit("sendError", { errMsg: err });
+        } else {
+            socket.emit("fetchCinemas", data);
+        }
+    });
+};
+
 export const create = (req, res) => {
     if (!req.body) {
         res.status(400).send({
@@ -33,6 +43,26 @@ export const create = (req, res) => {
         }
     });
 };
+
+// const createWithSocket = (socket, data) => {
+//     if (!data) {
+//         socket.emit("sendError", { message: "Need a name!!" });
+//     }
+
+//     const newCinema = {
+//         name: data.cinema_name,
+//     };
+
+//     Cinema.create(newCinema, (err, data) => {
+//         if (err) {
+//             socket.emit("sendError", {
+//                 message: err.message || "Error when Creating New Cinema...",
+//             });
+//         } else {
+//             socket.broadcast.emit("createCinema");
+//         }
+//     });
+// };
 
 export const deleteOne = (req, res) => {
     Cinema.deleteById(req.params.id, (err, data) => {
