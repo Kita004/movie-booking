@@ -22,7 +22,7 @@ export const fetchHallsByCinemaId = async (cinema_id) => {
 
 export const fetchSeatsByHallId = async (hall_id) => {
     try {
-        const res = await axios.get(`/api/seats?hall_id=${hall_id}`);
+        const res = await axios.get(BASE_URL + `/seats?hall_id=${hall_id}`);
         return res.data;
     } catch (err) {
         console.info("Error when fetching Seats with hall_id: ", err);
