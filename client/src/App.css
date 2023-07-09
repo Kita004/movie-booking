@@ -9,6 +9,13 @@
     margin: 2rem;
 }
 
+.card {
+    margin: 2rem;
+    padding: 0.5rem;
+    border: 2px solid black;
+    border-radius: 15px;
+}
+
 button {
     color: white;
     background-color: black;
@@ -16,13 +23,6 @@ button {
     border: none;
     border-radius: 5px;
     cursor: pointer;
-}
-
-.card {
-    margin: 2rem;
-    padding: 0.5rem;
-    border: 2px solid black;
-    border-radius: 15px;
 }
 
 .seat-btn {
@@ -35,12 +35,16 @@ button {
     color: black;
 }
 
+.seat-btn:disabled:hover {
+    outline: none;
+}
+
 .seat-btn.free {
     background-color: lightgreen;
 }
 
 .seat-btn.reserved {
-    background-color: moccasin;
+    background-color: khaki;
 }
 .seat-btn.sold {
     background-color: lightcoral;
