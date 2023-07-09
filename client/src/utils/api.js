@@ -29,7 +29,7 @@ export const fetchSeatsByHallId = async (hall_id) => {
     }
 };
 
-export const reserveSeat = async (seatToReserve) => {
+export const bookSeat = async (seatToReserve) => {
     try {
         const res = await axios.post(
             BASE_URL + "/seats/reserve",

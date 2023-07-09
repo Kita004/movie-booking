@@ -14,6 +14,7 @@ import {
     // fetchCinemas,
     fetchHallsByCinemaId,
     fetchSeatsByHallId,
+    bookSeat,
 } from "./utils/api";
 import { buildPositions } from "./utils/hallPositions";
 
@@ -21,6 +22,7 @@ function App() {
     const [cinemas, setCinemas] = useState();
     const [halls, setHalls] = useState();
     const [seats, setSeats] = useState();
+    const [seatsToBuy, setSeatsToBuy] = useState([]);
 
     useEffect(() => {
         socket.on("createCinema", (data) => {
@@ -50,6 +52,15 @@ function App() {
         setSeats(buildPositions(rows, cols, data));
     };
 
+    const reserveSeat = async (hall_id, position) => {
+        const seatToReserve = { hall_id: hall_id, position: position };
+        const res = await bookSeat(seatToReserve);
+        setSeatsToBuy((prev) => [...prev, res]);
+    };
+    const emptyReservedSeats = () => {
+        setSeatsToBuy([]);
+    };
+
     return (
         <SocketContext.Provider value={socket}>
             <div className="App flex-container">
@@ -75,7 +86,9 @@ function App() {
                         <Route
                             path="cinema/:id"
                             element={
-                                <CinemaDetail>
+                                <CinemaDetail
+                                    emptyReservedSeats={emptyReservedSeats}
+                                >
                                     {halls
                                         ? halls.map((hall) => (
                                               <HallCard
@@ -93,7 +106,14 @@ function App() {
                         />
                         <Route
                             path="/hall/:id"
-                            element={<HallDetail seats={seats} />}
+                            element={
+                                <HallDetail
+                                    seats={seats}
+                                    seatsToBuy={seatsToBuy}
+                                    reserveSeat={reserveSeat}
+                                    emptyReservedSeats={emptyReservedSeats}
+                                />
+                            }
                         />
                     </Routes>
                 </Router>

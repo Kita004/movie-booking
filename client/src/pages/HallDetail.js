@@ -1,17 +1,18 @@
-import { useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { SeatButton } from "../components/SeatButton";
-import * as api from "../utils/api";
 
-export const HallDetail = ({ seats }) => {
-    const [seatsToBuy, setSeatsToBuy] = useState([]);
+export const HallDetail = ({
+    seats,
+    seatsToBuy,
+    reserveSeat,
+    emptyReservedSeats,
+}) => {
     const params = useParams();
     const nav = useNavigate();
 
-    const reserveSeat = async (position) => {
-        const seatToReserve = { hall_id: params.id, position: position };
-        const res = await api.reserveSeat(seatToReserve);
-        setSeatsToBuy((prev) => [...prev, res]);
+    const onBack = () => {
+        emptyReservedSeats();
+        nav(-1);
     };
 
     return (
@@ -23,6 +24,7 @@ export const HallDetail = ({ seats }) => {
                           <SeatButton
                               key={seat.position}
                               id={seat.id}
+                              hall_id={params.id}
                               position={seat.position}
                               status={seat.status}
                               reserveSeat={reserveSeat}
@@ -32,13 +34,13 @@ export const HallDetail = ({ seats }) => {
             </div>
             <h1>Seats to Buy</h1>
             <div className="flex-container">
-                {seatsToBuy.length === 0
+                {seatsToBuy?.length === 0
                     ? "Reserve Seats!"
                     : seatsToBuy.map((seat) => (
                           <span key={seat.id}>{seat.position}</span>
                       ))}
             </div>
-            <button onClick={() => nav(-1)}>Back</button>
+            <button onClick={onBack}>Back</button>
         </div>
     );
 };

@@ -1,6 +1,6 @@
-export const SeatButton = ({ id, position, status, reserveSeat }) => {
+export const SeatButton = ({ id, hall_id, position, status, reserveSeat }) => {
     const onReserve = () => {
-        reserveSeat(position);
+        reserveSeat(hall_id, position);
     };
 
     return (
