@@ -16,8 +16,8 @@ INSERT INTO seats (position, status, hall_id)
         (4, "reserved", 1),
         (6, "reserved", 2),
         (8, "sold", 2),
-        (2, "sold", 3)
-        (3, "sold", 3)
-        (4, "sold", 3)
+        (2, "sold", 3),
+        (3, "sold", 3),
+        (4, "sold", 3),
         (12, "sold", 4),
         (13, "sold", 4);
