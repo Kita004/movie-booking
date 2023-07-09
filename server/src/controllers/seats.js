@@ -70,7 +70,8 @@ export const findById = (req, res) => {
 };
 
 export const buySeat = (req, res) => {
-    Seat.updateStatusById(req.params.id, (err, data) => {
+    // check if Seat is still Reserved
+    Seat.getById(req.params.id, (err, data) => {
         if (err) {
             if (err.message) {
                 res.status(404).send({
@@ -82,7 +83,21 @@ export const buySeat = (req, res) => {
                 });
             }
         } else {
-            res.send(data);
+            Seat.updateStatusById(req.params.id, "sold", (err, data) => {
+                if (err) {
+                    if (err.message) {
+                        res.status(404).send({
+                            message: "Could not find Seat with this ID...",
+                        });
+                    } else {
+                        res.status(500).send({
+                            message: "Error when retrieving Seat with ID...",
+                        });
+                    }
+                } else {
+                    res.send(data);
+                }
+            });
         }
     });
 };

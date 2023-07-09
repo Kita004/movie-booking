@@ -28,3 +28,15 @@ export const fetchSeatsByHallId = async (hall_id) => {
         console.info("Error when fetching Seats with hall_id: ", err);
     }
 };
+
+export const reserveSeat = async (seatToReserve) => {
+    try {
+        const res = await axios.post(
+            BASE_URL + "/seats/reserve",
+            seatToReserve
+        );
+        return res.data;
+    } catch (err) {
+        console.info("Error when Reserving Seat: ", err);
+    }
+};

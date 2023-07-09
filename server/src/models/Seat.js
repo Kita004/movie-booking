@@ -71,8 +71,8 @@ Seat.checkIfReserved = (seatToReserve, result) => {
     });
 };
 
-Seat.updateStatusById = (id, result) => {
-    let query = `UPDATE seats SET status = 'sold' WHERE id = ${id}`;
+Seat.updateStatusById = (id, status, result) => {
+    let query = `UPDATE seats SET status = ${status} WHERE id = ${id}`;
 
     db.query(query, (err, data) => {
         if (err) {
