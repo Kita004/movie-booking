@@ -29,6 +29,9 @@ function App() {
             console.log("Data: ", data);
             setCinemas((prev) => [...prev, data]);
         });
+        socket.on("reserveSeat", (data) => {
+            alert("Fetch Seats!");
+        });
     }, [socket]);
 
     useEffect(() => {
@@ -54,6 +57,7 @@ function App() {
 
     const reserveSeat = async (hall_id, position) => {
         const seatToReserve = { hall_id: hall_id, position: position };
+        // socket.emit("reserveSeat", seatToReserve);
         const res = await bookSeat(seatToReserve);
         setSeatsToBuy((prev) => [...prev, res]);
     };

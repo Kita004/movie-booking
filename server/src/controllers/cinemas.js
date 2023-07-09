@@ -46,7 +46,7 @@ export const create = (req, res) => {
 
 export const createWithSocket = (socket, data, io = null) => {
     if (!data) {
-        socket.emit("sendError", { message: "Need a name!!" });
+        socket.emit("sendError", { message: "Content cannot be empty!" });
     }
 
     const newCinema = {

@@ -1,5 +1,37 @@
 import { Seat } from "../models/Seat.js";
 
+export const findAll = (req, res) => {
+    const hall_id = req.query.hall_id;
+
+    Seat.getAll(hall_id, (err, data) => {
+        if (err) {
+            res.status(500).send({
+                message: err.message || "Error when retrieving All Seats...",
+            });
+        } else {
+            res.send(data);
+        }
+    });
+};
+
+export const findById = (req, res) => {
+    Seat.getById(req.params.id, (err, data) => {
+        if (err) {
+            if (err.message) {
+                res.status(404).send({
+                    message: "Could not find Seat with this ID...",
+                });
+            } else {
+                res.status(500).send({
+                    message: "Error when retrieving Seat with ID...",
+                });
+            }
+        } else {
+            res.send(data);
+        }
+    });
+};
+
 export const reserveSeat = (req, res) => {
     if (!req.body) {
         res.status(400).send({
@@ -37,34 +69,39 @@ export const reserveSeat = (req, res) => {
     });
 };
 
-export const findAll = (req, res) => {
-    const hall_id = req.query.hall_id;
+export const reserveSeatWithSocket = (socket, data, io = null) => {
+    if (!data) {
+        socket.emit("sendError", { message: "Content cannot be empty!" });
+    }
+    const seatToReserve = {
+        position: data.position,
+        hall_id: data.hall_id,
+    };
 
-    Seat.getAll(hall_id, (err, data) => {
+    // check if Seat is already Reserved
+    Seat.checkIfReserved(seatToReserve, (err, data) => {
         if (err) {
-            res.status(500).send({
-                message: err.message || "Error when retrieving All Seats...",
+            socket.emit("sendError", {
+                message: "Error when Reserving Seat...",
             });
-        } else {
-            res.send(data);
+        }
+
+        if (data) {
+            socket.emit({ message: "Seat is Already Taken!" });
         }
     });
-};
 
-export const findById = (req, res) => {
-    Seat.getById(req.params.id, (err, data) => {
+    // create Seat if position is not Reserved
+    Seat.create(seatToReserve, (err, data) => {
         if (err) {
-            if (err.message) {
-                res.status(404).send({
-                    message: "Could not find Seat with this ID...",
-                });
-            } else {
-                res.status(500).send({
-                    message: "Error when retrieving Seat with ID...",
-                });
-            }
+            socket.emit("sendError", {
+                message: "Error when Reserving Seat...",
+            });
         } else {
-            res.send(data);
+            io.to("hall" + seatToReserve.hall_id).emit(
+                "reserveSeat",
+                seatToReserve.hall_id
+            );
         }
     });
 };

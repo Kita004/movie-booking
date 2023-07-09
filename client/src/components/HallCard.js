@@ -1,8 +1,16 @@
+import { useContext } from "react";
 import { useNavigate } from "react-router-dom";
+import { SocketContext } from "../context/socket";
 
 export const HallCard = ({ id, name, rows, cols, getSeats }) => {
     const nav = useNavigate();
+    const socket = useContext(SocketContext);
+
     const onCheck = () => {
+        if (id) {
+            socket.emit("joinHall", id);
+        }
+
         getSeats(id, rows, cols);
         nav("/hall/" + id);
     };

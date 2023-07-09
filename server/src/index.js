@@ -10,6 +10,7 @@ import { seatRouter } from "./routes/seats.js";
 
 import { initDB } from "./models/sql/initDB.js";
 import { createWithSocket, findAllWithSocket } from "./controllers/cinemas.js";
+import { reserveSeatWithSocket } from "./controllers/seats.js";
 
 dotenv.config();
 
@@ -25,10 +26,18 @@ export const io = new Server(server, {
 });
 
 io.on("connection", (socket) => {
-    console.log(`New User: ${socket.id}`);
+    console.log(`New User Connected: ${socket.id}`);
 
-    socket.on("createCinema", (data) => createWithSocket(socket, data, io));
+    socket.on("joinHall", (hall_id) => {
+        console.log(`hall_id: ${hall_id} | socket: ${socket.id}`);
+        socket.join("hall" + hall_id);
+        console.log("Rooms: ", socket.rooms);
+    });
+
     socket.on("fetchCinemas", () => findAllWithSocket(socket));
+    socket.on("createCinema", (data) => createWithSocket(socket, data, io));
+
+    socket.on("reserveSeat", (data) => reserveSeatWithSocket(socket, data, io));
 });
 
 app.use(express.json());
