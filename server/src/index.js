@@ -5,7 +5,12 @@ import { hallRouter } from "./routes/halls.js";
 import { cinemaRouter } from "./routes/cinemas.js";
 import { seatRouter } from "./routes/seats.js";
 
+import { initDB } from "./models/sql/initDB.js";
+
 dotenv.config();
+
+// create tables and records
+initDB();
 
 const app = express();
 app.use(express.json());
